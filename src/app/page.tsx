@@ -1,4 +1,5 @@
 import TodoApp from "@/components/TodoApp";
+import Ufo from "@/components/Ufo";
 
 export default function Home() {
   return (
@@ -27,6 +28,11 @@ export default function Home() {
         <span className="shooting-star" />
         <span className="shooting-star" />
         <span className="shooting-star" />
+      </div>
+
+      {/* 외계인이 탄 UFO */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <Ufo />
       </div>
 
       {/* 비네트 */}

@@ -259,15 +259,81 @@ body {
   }
 }
 
+/* ---- UFO ---- */
+@keyframes ufo-drift {
+  from {
+    transform: translate3d(-24vw, 0, 0);
+  }
+  to {
+    transform: translate3d(118vw, 0, 0);
+  }
+}
+
+/* 살짝 기울이며 떠다닌다 */
+@keyframes ufo-bob {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-3deg);
+  }
+  50% {
+    transform: translate3d(0, -16px, 0) rotate(3deg);
+  }
+}
+
+@keyframes ufo-light {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes ufo-beam-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.ufo-drift {
+  animation: ufo-drift 72s linear infinite;
+  /* 음수 지연으로 주기 중간부터 시작 — 로드 직후 바로 화면에 들어와 있다 */
+  animation-delay: -18s;
+  will-change: transform;
+}
+.ufo-bob {
+  animation: ufo-bob 6s ease-in-out infinite;
+  will-change: transform;
+}
+.ufo-light {
+  animation: ufo-light 1.8s ease-in-out infinite;
+}
+.ufo-beam {
+  animation: ufo-beam-pulse 4.5s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .aurora-blob,
   .todo-in,
   .stars,
-  .shooting-star {
+  .shooting-star,
+  .ufo-drift,
+  .ufo-bob,
+  .ufo-light,
+  .ufo-beam {
     animation: none;
   }
   /* 유성은 정지 상태에서 화면에 걸쳐 있으면 어색하다 — 숨긴다 */
   .shooting-star {
     display: none;
+  }
+  /* UFO는 화면 밖(-24vw)에 멈춰 버리므로 보이는 자리로 데려다 놓는다 */
+  .ufo-drift {
+    transform: translate3d(8vw, 0, 0);
   }
 }
