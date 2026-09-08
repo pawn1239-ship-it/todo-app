@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useSyncExternalStore, type FormEvent } from "react";
+import Clock from "@/components/Clock";
 import { todoStore, type Priority, type Todo } from "@/lib/todoStore";
 
 type Filter = "all" | "active" | "completed";
@@ -162,6 +163,7 @@ export default function TodoApp() {
 
       <div className="relative rounded-[1.55rem] border border-white/60 bg-white/90 p-6 shadow-2xl shadow-indigo-500/10 backdrop-blur-xl dark:border-white/[.08] dark:bg-zinc-900/85">
         <header className="mb-5 text-center">
+          <Clock />
           <h1 className="bg-gradient-to-r from-indigo-600 via-fuchsia-600 to-sky-600 bg-clip-text text-3xl font-extrabold tracking-tight text-transparent dark:from-indigo-400 dark:via-fuchsia-400 dark:to-sky-400">
             할 일 목록
           </h1>
