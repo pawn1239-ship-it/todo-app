@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { getOwnerId } from "@/lib/owner";
 import { deleteTodo, editTodo, setCompleted } from "@/lib/todosRepo";
 import type { Priority } from "@/lib/todoTypes";
 
@@ -8,6 +9,7 @@ export async function PATCH(
   req: NextRequest,
   ctx: RouteContext<"/api/todos/[id]">,
 ) {
+  const ownerId = await getOwnerId();
   const { id } = await ctx.params;
   const body = await req.json().catch(() => null);
   if (!body) {
@@ -20,7 +22,7 @@ export async function PATCH(
     body.text === undefined &&
     body.priority === undefined
   ) {
-    const todo = await setCompleted(id, body.completed);
+    const todo = await setCompleted(ownerId, id, body.completed);
     return todo
       ? NextResponse.json(todo)
       : NextResponse.json({ error: "not found" }, { status: 404 });
@@ -40,7 +42,7 @@ export async function PATCH(
       ? body.dueTime
       : null;
 
-  const todo = await editTodo(id, { text, priority, dueDate, dueTime });
+  const todo = await editTodo(ownerId, id, { text, priority, dueDate, dueTime });
   return todo
     ? NextResponse.json(todo)
     : NextResponse.json({ error: "not found" }, { status: 404 });
@@ -50,7 +52,8 @@ export async function DELETE(
   _req: NextRequest,
   ctx: RouteContext<"/api/todos/[id]">,
 ) {
+  const ownerId = await getOwnerId();
   const { id } = await ctx.params;
-  await deleteTodo(id);
+  await deleteTodo(ownerId, id);
   return NextResponse.json({ ok: true });
 }

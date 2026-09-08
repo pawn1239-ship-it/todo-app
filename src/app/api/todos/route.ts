@@ -1,14 +1,17 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { getOwnerId } from "@/lib/owner";
 import { clearCompleted, createTodo, listTodos } from "@/lib/todosRepo";
 import type { Priority } from "@/lib/todoTypes";
 
 const PRIORITIES: Priority[] = ["high", "medium", "low"];
 
 export async function GET() {
-  return NextResponse.json(await listTodos());
+  const ownerId = await getOwnerId();
+  return NextResponse.json(await listTodos(ownerId));
 }
 
 export async function POST(req: NextRequest) {
+  const ownerId = await getOwnerId();
   const body = await req.json().catch(() => null);
   const text = typeof body?.text === "string" ? body.text.trim() : "";
   if (!text) {
@@ -24,11 +27,12 @@ export async function POST(req: NextRequest) {
       ? body.dueTime
       : null;
 
-  const todo = await createTodo({ text, priority, dueDate, dueTime });
+  const todo = await createTodo(ownerId, { text, priority, dueDate, dueTime });
   return NextResponse.json(todo, { status: 201 });
 }
 
 export async function DELETE() {
-  await clearCompleted();
+  const ownerId = await getOwnerId();
+  await clearCompleted(ownerId);
   return NextResponse.json({ ok: true });
 }
